@@ -2,3 +2,7 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 .DS_Store
+.env
+
+# 학습 결과 (개인 기록, 커밋 제외)
+results/
