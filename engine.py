@@ -1,0 +1,103 @@
+"""Linux Master Quiz - 공유 채점 엔진"""
+import base64 as _b
+import json as _j
+import os as _os
+
+_DB = {
+    "q1": "eyIxIjogeyJxIjogIu2YhOyerCDrgrTqsIAg7Ja064qUIO2PtOuNlOyXkCDsnojripTsp4Ag7ZmV7J247ZWY66Ck66m0PyIsICJhIjogWyJwd2QiXSwgImgiOiAicHJpbnQgd29ya2luZyBkaXJlY3RvcnnsnZgg7JW97J6QIn0sICIyIjogeyJxIjogIu2ZiCDrlJTroInthqDrpqzroZwg7J2064+Z7ZWY66Ck66m0PyIsICJhIjogWyJjZCB+IiwgImNkIl0sICJoIjogImNkIOuSpOyXkCDslYTrrLTqsoPrj4Qg7JWIIOyTsOqxsOuCmCB+66W8IOyTsOuptCDtmYjsnLzroZwifSwgIjMiOiB7InEiOiAi7ZWcIOuLqOqzhCDsg4HsnIQg7Y+0642U66GcIOydtOuPme2VmOugpOuptD8iLCAiYSI6IFsiY2QgLi4iXSwgImgiOiAiLi7snYAg67aA66qoIOuUlOugie2GoOumrOulvCDsnZjrr7gifSwgIjQiOiB7InEiOiAiL2hvbWUvdXNlci9kYXRhIO2PtOuNlOuhnCDsnbTrj5ntlZjroKTrqbQ/IiwgImEiOiBbImNkIC9ob21lL3VzZXIvZGF0YSJdLCAiaCI6ICLsoIjrjIAg6rK966Gc66GcIOydtOuPmSJ9LCAiNSI6IHsicSI6ICLtmITsnqwg7Y+0642U7J2YIO2MjOydvCDrqqnroZ3snYQg67O066Ck66m0PyIsICJhIjogWyJscyJdLCAiaCI6ICJsaXN07J2YIOyVveyekCJ9LCAiNiI6IHsicSI6ICJmaWxlLnR4dCDrgrTsmqnsnYQg7YSw66+464SQ7JeQIOy2nOugpe2VmOugpOuptD8iLCAiYSI6IFsiY2F0IGZpbGUudHh0Il0sICJoIjogImNvbmNhdGVuYXRl7J2YIOyVveyekCwg7YyM7J28IOuCtOyaqeydhCDstpzroKUifSwgIjciOiB7InEiOiAi6ri0IO2MjOydvOydhCDsiqTtgazroaTtlZjrqbTshJwg67O066Ck66m0PyIsICJhIjogWyJsZXNzIGZpbGUudHh0Il0sICJoIjogInHroZwg64KY6rCA6rOgLCDrsKntlqXtgqTroZwg7Iqk7YGs66GkIn0sICI4IjogeyJxIjogInZpbeycvOuhnCBjb25maWcueWFtbOydhCDsl7TroKTrqbQ/IiwgImEiOiBbInZpbSBjb25maWcueWFtbCIsICJ2aSBjb25maWcueWFtbCJdLCAiaCI6ICJ2aW0g65Kk7JeQIO2MjOydvOuqhSJ9LCAiOSI6IHsicSI6ICJ2aW3sl5DshJwg7Y647KeRKOyeheugpSkg66qo65Oc66GcIOuTpOyWtOqwgOugpOuptCDslrTrlqQg7YKk66W8IOuIhOultOuCmD8iLCAiYSI6IFsiaSJdLCAiaCI6ICJpbnNlcnTsnZggaSJ9LCAiMTAiOiB7InEiOiAidmlt7JeQ7IScIOyggOyepe2VmOqzoCDrgpjqsIDroKTrqbQ/ICjrqoXroLkg66qo65Oc7JeQ7IScKSIsICJhIjogWyI6d3EiXSwgImgiOiAid3JpdGUgKyBxdWl0In0sICIxMSI6IHsicSI6ICJ2aW3sl5DshJwg7KCA7J6l7ZWY7KeAIOyViuqzoCDqsJXsoJzroZwg64KY6rCA66Ck66m0PyIsICJhIjogWyI6cSEiXSwgImgiOiAicXVpdCArIOqwleygnCghKSJ9LCAiMTIiOiB7InEiOiAi7YSw66+464SQIO2ZlOuptOydhCDquajrgZfsnbQg7KeA7Jqw66Ck66m0PyIsICJhIjogWyJjbGVhciJdLCAiaCI6ICLtmZTrqbTrp4wg7KeA7JuM7KeA6rOgIO2eiOyKpO2GoOumrOuKlCDrgqjslYTsnojsnYwifSwgIjEzIjogeyJxIjogIuuCtOqwgCDriITqtajroZwg66Gc6re47J247ZaI64qU7KeAIO2ZleyduO2VmOugpOuptD8iLCAiYSI6IFsid2hvYW1pIl0sICJoIjogIndobyBhbSBpP+ulvCDrtpnsl6wg7JO0IOuqheugueyWtCJ9LCAiMTQiOiB7InEiOiAibHMg66qF66C57Ja07J2YIOunpOuJtOyWvOydhCDrs7TroKTrqbQ/IiwgImEiOiBbIm1hbiBscyJdLCAiaCI6ICJtYW51YWzsnZgg7JW97J6QLCBx66GcIOuCmOqwkCJ9LCAiMTUiOiB7InEiOiAi7ISc67KEIOygkeyGjSjthLDrr7jrhJAp7J2EIOyiheujjO2VmOugpOuptD8iLCAiYSI6IFsiZXhpdCJdLCAiaCI6ICJTU0gg7IS47IWY64+EIOydtOqxuOuhnCDsooXro4wifX0=",
+    "q2": "eyIxIjogeyJxIjogIu2YhOyerCDtj7TrjZTsnZgg7YyM7J28IOuqqeuhneydhCDsnpDshLjtnogg67O066Ck66m0PyIsICJhIjogWyJscyAtbCJdLCAiaCI6ICJsc+ydmCBsb25nIGZvcm1hdCDsmLXshZgifSwgIjIiOiB7InEiOiAi7Iio6rmAIO2MjOydvOq5jOyngCDtj6ztlajtlbTshJwg7J6Q7IS47Z6IIOuztOugpOuptD8iLCAiYSI6IFsibHMgLWxhIiwgImxzIC1hbCIsICJscyAtYSAtbCIsICJscyAtbCAtYSJdLCAiaCI6ICJhbGwgKyBsb25nIOyYteyFmCDsobDtlakifSwgIjMiOiB7InEiOiAi7YyM7J28IO2BrOq4sOulvCBNQi9HQiDri6jsnITroZwg7J6Q7IS47Z6IIOuztOugpOuptD8iLCAiYSI6IFsibHMgLWxoIiwgImxzIC1obCJdLCAiaCI6ICJodW1hbi1yZWFkYWJsZSDsmLXshZgifSwgIjQiOiB7InEiOiAiZGF0YS9yYXcvMjAyNCDtj7TrjZTrpbwg7ZWc67KI7JeQIOunjOuTnOugpOuptD8gKOykkeqwhCDtj7TrjZTqsIAg7JeG7Ja064+EKSIsICJhIjogWyJta2RpciAtcCBkYXRhL3Jhdy8yMDI0Il0sICJoIjogInBhcmVudHMg7Ji17IWY7Jy866GcIOykkeqwhCDtj7TrjZQg7J6Q64+ZIOyDneyEsSJ9LCAiNSI6IHsicSI6ICJteV9mb2xkZXIvIOyghOyytOulvCBiYWNrdXBfZm9sZGVyL+uhnCDrs7XsgqztlZjroKTrqbQ/IiwgImEiOiBbImNwIC1yIG15X2ZvbGRlci8gYmFja3VwX2ZvbGRlci8iLCAiY3AgLXIgbXlfZm9sZGVyIGJhY2t1cF9mb2xkZXIiLCAiY3AgLVIgbXlfZm9sZGVyLyBiYWNrdXBfZm9sZGVyLyIsICJjcCAtUiBteV9mb2xkZXIgYmFja3VwX2ZvbGRlciJdLCAiaCI6ICLtj7TrjZQg67O17IKs7JeQ64qUIHJlY3Vyc2l2ZSDsmLXshZgg7ZWE7IiYIn0sICI2IjogeyJxIjogIm9sZC50eHQg7J2066aE7J2EIG5ldy50eHTroZwg67CU6r6466Ck66m0PyIsICJhIjogWyJtdiBvbGQudHh0IG5ldy50eHQiXSwgImgiOiAibW92ZeuKlCDsnbTrpoQg67OA6rK97JeQ64+EIOyCrOyaqSJ9LCAiNyI6IHsicSI6ICJteV9mb2xkZXIvIOyghOyytOulvCDtmZXsnbgg7JeG7J20IOyCreygnO2VmOugpOuptD8iLCAiYSI6IFsicm0gLXJmIG15X2ZvbGRlci8iLCAicm0gLXJmIG15X2ZvbGRlciIsICJybSAtZnIgbXlfZm9sZGVyLyIsICJybSAtZnIgbXlfZm9sZGVyIl0sICJoIjogInJlY3Vyc2l2ZSArIGZvcmNlIn0sICI4IjogeyJxIjogImZpbGUudHh0IOuCtOyaqeydhCDspITrsojtmLjsmYAg7ZWo6ruYIOy2nOugpe2VmOugpOuptD8iLCAiYSI6IFsiY2F0IC1uIGZpbGUudHh0Il0sICJoIjogImNhdOydmCBudW1iZXIg7Ji17IWYIn0sICI5IjogeyJxIjogImZpbGUudHh07J2YIOyymOydjCAyMOykhOunjCDrs7TroKTrqbQ/IiwgImEiOiBbImhlYWQgLW4gMjAgZmlsZS50eHQiLCAiaGVhZCAtMjAgZmlsZS50eHQiXSwgImgiOiAiaGVhZCArIOykhCDsiJgg7KeA7KCVIn0sICIxMCI6IHsicSI6ICJsb2cudHh07JeQIOyDiOuhnOyatCDrgrTsmqnsnbQg7LaU6rCA65CY64qUIOqxuCDsi6Tsi5zqsITsnLzroZwg67O066Ck66m0PyIsICJhIjogWyJ0YWlsIC1mIGxvZy50eHQiXSwgImgiOiAiZm9sbG93IOyYteyFmCJ9LCAiMTEiOiB7InEiOiAiZmlsZS50eHTsnZgg7KSEIOyImOulvCDshLjroKTrqbQ/IiwgImEiOiBbIndjIC1sIGZpbGUudHh0Il0sICJoIjogIndvcmQgY291bnTsnZggbGluZXMg7Ji17IWYIn0sICIxMiI6IHsicSI6ICIo67O17Iq1KSByZXN1bHRzL291dHB1dC8g7Y+0642U66W8IO2VnOuyiOyXkCDrp4zrk5zroKTrqbQ/IiwgImEiOiBbIm1rZGlyIC1wIHJlc3VsdHMvb3V0cHV0IiwgIm1rZGlyIC1wIHJlc3VsdHMvb3V0cHV0LyJdLCAiaCI6ICJRMTnsmYAg6rCZ7J2AIO2IteyFmCJ9LCAiMTMiOiB7InEiOiAiKOuzteyKtSkgc3JjLyDtj7TrjZTrpbwgc3JjX2JhY2t1cC/snLzroZwg67O17IKs7ZWY66Ck66m0PyIsICJhIjogWyJjcCAtciBzcmMvIHNyY19iYWNrdXAvIiwgImNwIC1yIHNyYyBzcmNfYmFja3VwIiwgImNwIC1SIHNyYy8gc3JjX2JhY2t1cC8iLCAiY3AgLVIgc3JjIHNyY19iYWNrdXAiXSwgImgiOiAiUTIw6rO8IOqwmeydgCDtjKjthLQifSwgIjE0IjogeyJxIjogIijrs7XsirUpIHRyYWluLmxvZ+ydmCDrp4jsp4Drp4kgNTDspITrp4wg67O066Ck66m0PyIsICJhIjogWyJ0YWlsIC1uIDUwIHRyYWluLmxvZyIsICJ0YWlsIC01MCB0cmFpbi5sb2ciXSwgImgiOiAidGFpbCArIOykhCDsiJgg7KeA7KCVIn0sICIxNSI6IHsicSI6ICIo67O17Iq1KSB0ZW1wLyDtj7TrjZTrpbwg6rCV7KCcIOyCreygnO2VmOugpOuptD8iLCAiYSI6IFsicm0gLXJmIHRlbXAvIiwgInJtIC1yZiB0ZW1wIiwgInJtIC1mciB0ZW1wLyIsICJybSAtZnIgdGVtcCJdLCAiaCI6ICJRMjLsmYAg6rCZ7J2AIO2MqO2EtCJ9fQ==",
+    "q3": "eyIxIjogeyJxIjogImxvZy50eHTsl5DshJwgJ2Vycm9yJ+qwgCDtj6ztlajtlJwg7KSE7J2EIOywvuycvOugpOuptD8iLCAiYSI6IFsiZ3JlcCAnZXJyb3InIGxvZy50eHQiLCAiZ3JlcCBcImVycm9yXCIgbG9nLnR4dCIsICJncmVwIGVycm9yIGxvZy50eHQiXSwgImgiOiAiZ3JlcCDquLDrs7gg7IKs7Jqp67KVIn0sICIyIjogeyJxIjogImxvZy50eHTsl5DshJwg64yA7IaM66y47J6QIOq1rOu2hCDsl4bsnbQgJ2Vycm9yJ+ulvCDqsoDsg4ntlZjroKTrqbQ/IiwgImEiOiBbImdyZXAgLWkgJ2Vycm9yJyBsb2cudHh0IiwgImdyZXAgLWkgXCJlcnJvclwiIGxvZy50eHQiLCAiZ3JlcCAtaSBlcnJvciBsb2cudHh0Il0sICJoIjogImlnbm9yZS1jYXNlIOyYteyFmCJ9LCAiMyI6IHsicSI6ICLtmITsnqwg7Y+0642UIOyVhOuemCDrqqjrk6Ag7YyM7J287JeQ7IScICdpbXBvcnQgdG9yY2gn66W8IOqygOyDie2VmOugpOuptD8iLCAiYSI6IFsiZ3JlcCAtciAnaW1wb3J0IHRvcmNoJyAuLyIsICJncmVwIC1yIFwiaW1wb3J0IHRvcmNoXCIgLi8iLCAiZ3JlcCAtciAnaW1wb3J0IHRvcmNoJyAuIiwgImdyZXAgLXIgXCJpbXBvcnQgdG9yY2hcIiAuIl0sICJoIjogInJlY3Vyc2l2ZSDsmLXshZgifSwgIjQiOiB7InEiOiAibG9nLnR4dOyXkOyEnCAnREVCVUcn6rCAIOyXhuuKlCDspITrp4wg67O066Ck66m0PyIsICJhIjogWyJncmVwIC12ICdERUJVRycgbG9nLnR4dCIsICJncmVwIC12IFwiREVCVUdcIiBsb2cudHh0IiwgImdyZXAgLXYgREVCVUcgbG9nLnR4dCJdLCAiaCI6ICJpbnZlcnQo67CY7KCEKSDtiLXshZgifSwgIjUiOiB7InEiOiAi7ZiE7J6sIO2PtOuNlCDslYTrnpjsl5DshJwgLnB5IO2MjOydvOydhCDrqqjrkZAg7LC+7Jy866Ck66m0PyIsICJhIjogWyJmaW5kIC4gLW5hbWUgJyoucHknIiwgImZpbmQgLiAtbmFtZSBcIioucHlcIiJdLCAiaCI6ICJmaW5kICsgbmFtZSDtjKjthLQifSwgIjYiOiB7InEiOiAiMTAwTULrs7Tri6Qg7YGwIO2MjOydvOydhCDssL7snLzroKTrqbQ/IiwgImEiOiBbImZpbmQgLiAtc2l6ZSArMTAwTSJdLCAiaCI6ICJzaXplIOyYteyFmCwgKyA9IOy0iOqzvCJ9LCAiNyI6IHsicSI6ICLsi6Ttlokg7KSR7J24IO2UhOuhnOyEuOyKpOyXkOyEnCBweXRob27rp4wg7ZWE7YSw66eB7ZWY66Ck66m0PyIsICJhIjogWyJwcyBhdXggfCBncmVwIHB5dGhvbiJdLCAiaCI6ICLtjIzsnbTtlITroZwgZ3JlcOyXkCDsoITri6wifSwgIjgiOiB7InEiOiAiJ2hlbGxvJ+ulvCBvdXRwdXQudHh07JeQIOyggOyepSjrja7slrTsk7DquLAp7ZWY66Ck66m0PyIsICJhIjogWyJlY2hvICdoZWxsbycgPiBvdXRwdXQudHh0IiwgImVjaG8gXCJoZWxsb1wiID4gb3V0cHV0LnR4dCIsICJlY2hvIGhlbGxvID4gb3V0cHV0LnR4dCJdLCAiaCI6ICI+IOumrOuLpOydtOugieyFmCJ9LCAiOSI6IHsicSI6ICInd29ybGQn66W8IG91dHB1dC50eHQg64Gd7JeQIOy2lOqwgO2VmOugpOuptD8iLCAiYSI6IFsiZWNobyAnd29ybGQnID4+IG91dHB1dC50eHQiLCAiZWNobyBcIndvcmxkXCIgPj4gb3V0cHV0LnR4dCIsICJlY2hvIHdvcmxkID4+IG91dHB1dC50eHQiXSwgImgiOiAiPj4g7J207Ja07JOw6riwIOumrOuLpOydtOugieyFmCJ9LCAiMTAiOiB7InEiOiAic2NyaXB0LnNo7JeQIOyLpO2WiSDqtoztlZzsnYQg7LaU6rCA7ZWY66Ck66m0PyIsICJhIjogWyJjaG1vZCAreCBzY3JpcHQuc2giXSwgImgiOiAiZXhlY3V0ZSDqtoztlZwg7LaU6rCAIn0sICIxMSI6IHsicSI6ICJQSUQgMTIzNDUg7ZSE66Gc7IS47Iqk66W8IOqwleygnCDsooXro4ztlZjroKTrqbQ/IiwgImEiOiBbImtpbGwgLTkgMTIzNDUiXSwgImgiOiAiU0lHS0lMTCDsi5zqt7jrhJAifSwgIjEyIjogeyJxIjogInB5dGhvbiB0cmFpbi5weeydmCDstpzroKXqs7wg7JeQ65+s66W8IOuqqOuRkCBhbGwubG9n7JeQIOyggOyepe2VmOugpOuptD8iLCAiYSI6IFsicHl0aG9uIHRyYWluLnB5ICY+IGFsbC5sb2ciLCAicHl0aG9uIHRyYWluLnB5ID4gYWxsLmxvZyAyPiYxIl0sICJoIjogIiY+IOuYkOuKlCA+ICsgMj4mMSJ9LCAiMTMiOiB7InEiOiAiKOuzteyKtSkgYXBwLmxvZ+yXkOyEnCDspITrsojtmLjsmYAg7ZWo6ruYICdXQVJOSU5HJ+ydhCDqsoDsg4ntlZjroKTrqbQ/IiwgImEiOiBbImdyZXAgLW4gJ1dBUk5JTkcnIGFwcC5sb2ciLCAiZ3JlcCAtbiBcIldBUk5JTkdcIiBhcHAubG9nIiwgImdyZXAgLW4gV0FSTklORyBhcHAubG9nIl0sICJoIjogIm51bWJlciDsmLXshZgifSwgIjE0IjogeyJxIjogIijrs7XsirUpIC5sb2cg7YyM7J287J2EIOywvuyVhOyEnCDsoITrtoAg7IKt7KCc7ZWY66Ck66m0PyIsICJhIjogWyJmaW5kIC4gLW5hbWUgJyoubG9nJyAtZGVsZXRlIiwgImZpbmQgLiAtbmFtZSBcIioubG9nXCIgLWRlbGV0ZSJdLCAiaCI6ICJmaW5kICsgZGVsZXRlIOyVoeyFmCJ9LCAiMTUiOiB7InEiOiAiKOuzteyKtSkgc2NyaXB0LnNo66W8IOyGjOycoOyekD1yd3gsIOq3uOujuT1yLXgsIOq4sO2DgD1yLXjroZwg7ISk7KCV7ZWY66Ck66m0PyIsICJhIjogWyJjaG1vZCA3NTUgc2NyaXB0LnNoIl0sICJoIjogInI9NCwgdz0yLCB4PTEg7ZWp7IKwIn19",
+    "q4": "eyIxIjogeyJxIjogIu2EsOuvuOuEkOydhCDri6vslYTrj4Qg7ZWZ7Iq17J20IOqzhOyGjeuQmOuPhOuhnSArIOuhnOq3uOultCB0cmFpbi5sb2fsl5Ag7KCA7J6l7ZWY66Ck66m0PyIsICJhIjogWyJub2h1cCBweXRob24gdHJhaW4ucHkgPiB0cmFpbi5sb2cgMj4mMSAmIl0sICJoIjogIm5vaHVwICsg66as64uk7J2066CJ7IWYICsgJiJ9LCAiMiI6IHsicSI6ICJHUFUgMOuyiOqzvCAx67KI66eMIOyCrOyaqe2VtOyEnCB0cmFpbi5weeulvCDsi6TtlontlZjroKTrqbQ/IiwgImEiOiBbIkNVREFfVklTSUJMRV9ERVZJQ0VTPTAsMSBweXRob24gdHJhaW4ucHkiXSwgImgiOiAi7ZmY6rK967OA7IiY66GcIEdQVSDsp4DsoJUifSwgIjMiOiB7InEiOiAiZmlsZS50eHTrpbwgdXNlckBzZXJ2ZXLsnZggL2hvbWUvdXNlci/roZwg67O17IKs7ZWY66Ck66m0PyIsICJhIjogWyJzY3AgZmlsZS50eHQgdXNlckBzZXJ2ZXI6L2hvbWUvdXNlci8iXSwgImgiOiAic2VjdXJlIGNvcHkifSwgIjQiOiB7InEiOiAibXlfZm9sZGVyL+ulvCBhcmNoaXZlLnRhci5neuuhnCDslZXstpXtlZjroKTrqbQ/IiwgImEiOiBbInRhciAtY3pmIGFyY2hpdmUudGFyLmd6IG15X2ZvbGRlci8iLCAidGFyIGN6ZiBhcmNoaXZlLnRhci5neiBteV9mb2xkZXIvIiwgInRhciAtY3pmIGFyY2hpdmUudGFyLmd6IG15X2ZvbGRlciIsICJ0YXIgY3pmIGFyY2hpdmUudGFyLmd6IG15X2ZvbGRlciJdLCAiaCI6ICJjPWNyZWF0ZSwgej1nemlwLCBmPWZpbGUifSwgIjUiOiB7InEiOiAiYXJjaGl2ZS50YXIuZ3rrpbwg7JWV7LaVIO2SgOugpOuptD8iLCAiYSI6IFsidGFyIC14emYgYXJjaGl2ZS50YXIuZ3oiLCAidGFyIHh6ZiBhcmNoaXZlLnRhci5neiJdLCAiaCI6ICJ4PWV4dHJhY3QifSwgIjYiOiB7InEiOiAi65SU7Iqk7YGsIOyghOyytCDsgqzsmqnrn4nsnYQg67O06riwIOyii+ydgCDri6jsnITroZwg7ZmV7J247ZWY66Ck66m0PyIsICJhIjogWyJkZiAtaCJdLCAiaCI6ICJkaXNrIGZyZWUgKyBodW1hbi1yZWFkYWJsZSJ9LCAiNyI6IHsicSI6ICLtmITsnqwg7Y+0642U7J2YIOqwgSDtla3rqqkg7YGs6riw66W8IOuztOugpOuptD8iLCAiYSI6IFsiZHUgLXNoICoiXSwgImgiOiAiZGlzayB1c2FnZSArIHN1bW1hcnkgKyBodW1hbi1yZWFkYWJsZSJ9LCAiOCI6IHsicSI6ICJsb2cudHh07JeQ7IScIEVSUk9S6rCAIO2PrO2VqOuQnCDspITsnbQg66qHIOqwnOyduOyngCDshLjroKTrqbQ/IiwgImEiOiBbImdyZXAgLWMgRVJST1IgbG9nLnR4dCIsICJncmVwIC1jICdFUlJPUicgbG9nLnR4dCIsICJncmVwIC1jIFwiRVJST1JcIiBsb2cudHh0IiwgImdyZXAgRVJST1IgbG9nLnR4dCB8IHdjIC1sIiwgImdyZXAgJ0VSUk9SJyBsb2cudHh0IHwgd2MgLWwiLCAiZ3JlcCBcIkVSUk9SXCIgbG9nLnR4dCB8IHdjIC1sIl0sICJoIjogImdyZXAgLWMg65iQ64qUIGdyZXAgKyB3YyAtbCJ9LCAiOSI6IHsicSI6ICLtmITsnqwg7Y+0642U7JeQIC5qc29uIO2MjOydvOydtCDrqocg6rCcIOyeiOuKlOyngCDshLjroKTrqbQ/IiwgImEiOiBbImZpbmQgLiAtbmFtZSAnKi5qc29uJyB8IHdjIC1sIiwgImZpbmQgLiAtbmFtZSBcIiouanNvblwiIHwgd2MgLWwiXSwgImgiOiAiZmluZCArIO2MjOydtO2UhCArIHdjIn0sICIxMCI6IHsicSI6ICJFUlJPUuunjCDrvYHslYTshJwgZXJyb3JzLmxvZyDtjIzsnbzroZwg7KCA7J6l7ZWY66Ck66m0PyIsICJhIjogWyJncmVwIEVSUk9SIGFwcC5sb2cgPiBlcnJvcnMubG9nIiwgImdyZXAgJ0VSUk9SJyBhcHAubG9nID4gZXJyb3JzLmxvZyIsICJncmVwIFwiRVJST1JcIiBhcHAubG9nID4gZXJyb3JzLmxvZyJdLCAiaCI6ICJncmVwICsgPiDrpqzri6TsnbTroInshZgifSwgIjExIjogeyJxIjogIuy1nOq3vCAxMDDspITsnZgg66Gc6re47JeQ7IScIFdBUk5JTkfrp4wg7LC+7Jy866Ck66m0PyIsICJhIjogWyJ0YWlsIC1uIDEwMCBhcHAubG9nIHwgZ3JlcCBXQVJOSU5HIiwgInRhaWwgLW4gMTAwIGFwcC5sb2cgfCBncmVwICdXQVJOSU5HJyIsICJ0YWlsIC1uIDEwMCBhcHAubG9nIHwgZ3JlcCBcIldBUk5JTkdcIiIsICJ0YWlsIC0xMDAgYXBwLmxvZyB8IGdyZXAgV0FSTklORyIsICJ0YWlsIC0xMDAgYXBwLmxvZyB8IGdyZXAgJ1dBUk5JTkcnIl0sICJoIjogInRhaWwgKyDtjIzsnbTtlIQgKyBncmVwIn0sICIxMiI6IHsicSI6ICLtj7TrjZTrs4Qg7Jqp65+J7J2EIO2BsCDsiJzshJzrjIDroZwg7IOB7JyEIDEw6rCc66eMIOuztOugpOuptD8iLCAiYSI6IFsiZHUgLXNoICovIHwgc29ydCAtcmggfCBoZWFkIC1uIDEwIiwgImR1IC1zaCAqLyB8IHNvcnQgLXJoIHwgaGVhZCAtMTAiLCAiZHUgLXNoICogfCBzb3J0IC1yaCB8IGhlYWQgLW4gMTAiLCAiZHUgLXNoICogfCBzb3J0IC1yaCB8IGhlYWQgLTEwIl0sICJoIjogImR1ICsgc29ydChyZXZlcnNlLCBodW1hbikgKyBoZWFkIn0sICIxMyI6IHsicSI6ICIo67O17Iq1KSBteV9kYXRhLyDtj7TrjZQg7KCE7LK066W8IOyEnOuyhOuhnCDrs7XsgqztlZjroKTrqbQ/IiwgImEiOiBbInNjcCAtciBteV9kYXRhLyB1c2VyQHNlcnZlcjovaG9tZS91c2VyLyIsICJzY3AgLXIgbXlfZGF0YSB1c2VyQHNlcnZlcjovaG9tZS91c2VyLyJdLCAiaCI6ICJzY3AgKyByZWN1cnNpdmUifSwgIjE0IjogeyJxIjogIijrs7XsirUpIGFyY2hpdmUudGFyLmd666W8IC90YXJnZXQvIO2PtOuNlOyXkCDtkoDroKTrqbQ/IiwgImEiOiBbInRhciAteHpmIGFyY2hpdmUudGFyLmd6IC1DIC90YXJnZXQvIiwgInRhciB4emYgYXJjaGl2ZS50YXIuZ3ogLUMgL3RhcmdldC8iXSwgImgiOiAiLUMg7Ji17IWY7Jy866GcIOuMgOyDgSDrlJTroInthqDrpqwg7KeA7KCVIn0sICIxNSI6IHsicSI6ICIo67O17Iq1KSAucHljIOy6kOyLnCDtjIzsnbzsnYQg7KCE67aAIOywvuyVhOyEnCDsgq3soJbtlZjroKTrqbQ/IiwgImEiOiBbImZpbmQgLiAtbmFtZSAnKi5weWMnIC1kZWxldGUiLCAiZmluZCAuIC1uYW1lIFwiKi5weWNcIiAtZGVsZXRlIl0sICJoIjogImZpbmQgKyBuYW1lICsgZGVsZXRlIn19",
+}
+
+_LEVEL_NAMES = {"q1": "입문", "q2": "초급", "q3": "중급", "q4": "고급"}
+_BASE_DIR = _os.path.dirname(_os.path.abspath(__file__))
+
+
+class Quiz:
+    def __init__(self, level):
+        self.level = level
+        self.level_name = _LEVEL_NAMES[level]
+        self._results = {}
+        self._current_hint = ""
+        self._save_path = _os.path.join(_BASE_DIR, "results", f"{level}.json")
+        self._db = {
+            int(k): v
+            for k, v in _j.loads(_b.b64decode(_DB[level]).decode()).items()
+        }
+
+    def _normalize(self, cmd):
+        return " ".join(cmd.strip().split())
+
+    def _save(self):
+        _os.makedirs(_os.path.dirname(self._save_path), exist_ok=True)
+        data = {
+            "level": self.level,
+            "level_name": self.level_name,
+            "results": self._results,
+        }
+        with open(self._save_path, "w") as f:
+            _j.dump(data, f, ensure_ascii=False, indent=2)
+
+    def check(self, q_num, user_answer):
+        d = self._db[q_num]
+        question, accepted = d["q"], d["a"]
+        self._current_hint = d["h"]
+
+        user_norm = self._normalize(user_answer)
+        is_correct = any(self._normalize(a) == user_norm for a in accepted)
+
+        if is_correct:
+            print(f"\u2705 Q{q_num}. {question}")
+            print(f"   \u2192 \033[1m{user_answer}\033[0m")
+        else:
+            print(f"\u274c Q{q_num}. {question}")
+            print(f"   \u2192 내 답: {user_answer}")
+            print(f"   \u2192 정답은 hint() 실행 후 다시 도전해보세요!")
+
+        self._results[str(q_num)] = {
+            "correct": is_correct,
+            "user_answer": user_answer,
+            "question": question,
+        }
+        self._save()
+        return is_correct
+
+    def reveal(self, q_num):
+        d = self._db[q_num]
+        print(f"\U0001f4a1 Q{q_num} 정답: \033[1m{d['a'][0]}\033[0m")
+
+    def hint(self):
+        print(f"\U0001f4a1 힌트: {self._current_hint}")
+
+    def summary(self):
+        total = len(self._db)
+        answered = len(self._results)
+        correct = sum(1 for r in self._results.values() if r["correct"])
+        wrong = [
+            f"Q{qn}"
+            for qn, r in sorted(self._results.items(), key=lambda x: int(x[0]))
+            if not r["correct"]
+        ]
+        not_attempted = [
+            f"Q{i}" for i in range(1, total + 1) if str(i) not in self._results
+        ]
+
+        pct = correct / total * 100 if total > 0 else 0
+        bar = "\u2588" * int(pct // 10) + "\u2591" * (10 - int(pct // 10))
+
+        print("\n" + "=" * 50)
+        print(f"  {self.level_name} ({self.level}) 결과")
+        print(f"  {bar} {correct}/{total} ({pct:.0f}%)")
+        if wrong:
+            print(f"  \u274c 틀린 문제: {', '.join(wrong)}")
+        if not_attempted:
+            print(f"  \u2753 미응답: {', '.join(not_attempted)}")
+        print("=" * 50)
+
+        if pct == 100:
+            print(f"\n\U0001f389 축하합니다! {self.level_name} 완벽 클리어!")
+        elif pct >= 80:
+            print(f"\n\U0001f44d 잘했습니다! 틀린 문제만 복습하면 완벽!")
+
+        self._save()
