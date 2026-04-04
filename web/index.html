@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linux 명령어 마스터</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header">
+      <h1 class="header-title"><span class="prompt">$ </span>linux-master</h1>
+      <p class="header-subtitle">매일 리눅스 명령어를 연습하세요</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav-bar">
+      <button class="nav-btn active" data-page="home">홈</button>
+      <button class="nav-btn" data-page="notebook">노트</button>
+      <button class="nav-btn" data-page="stats">통계</button>
+    </nav>
+
+    <!-- ===== PAGE: Home ===== -->
+    <main id="page-home">
+
+      <!-- Daily Quiz Banner -->
+      <div class="daily-banner" id="daily-banner">
+        <div class="daily-label">DAILY CHALLENGE</div>
+        <div class="daily-title">오늘의 퀴즈</div>
+        <div class="daily-desc">매일 새로운 5문제 &mdash; 모든 난이도에서 무작위 출제</div>
+      </div>
+
+      <!-- Level Cards -->
+      <h2 style="font-size:1rem; color:var(--text-secondary); margin-bottom:12px;">레벨별 연습</h2>
+      <div class="level-cards">
+        <div class="level-card beginner" data-level="beginner">
+          <div class="level-emoji">&#x1F331;</div>
+          <div class="level-name">초급</div>
+          <div class="level-desc">ls, mkdir, cp, mv, rm, cat, head, tail, less, wc, diff</div>
+          <div class="level-progress">
+            <div class="progress-bar"><div class="progress-fill" id="progress-beginner" style="width:0%"></div></div>
+            <div class="progress-text" id="progress-text-beginner">0 / 0 완료</div>
+          </div>
+        </div>
+        <div class="level-card intermediate" data-level="intermediate">
+          <div class="level-emoji">&#x1F525;</div>
+          <div class="level-name">중급</div>
+          <div class="level-desc">grep, find, which, 파이프, 리다이렉션, chmod, chown, ps, kill</div>
+          <div class="level-progress">
+            <div class="progress-bar"><div class="progress-fill" id="progress-intermediate" style="width:0%"></div></div>
+            <div class="progress-text" id="progress-text-intermediate">0 / 0 완료</div>
+          </div>
+        </div>
+        <div class="level-card advanced" data-level="advanced">
+          <div class="level-emoji">&#x1F680;</div>
+          <div class="level-name">고급</div>
+          <div class="level-desc">wget, curl, scp, ssh, rsync, tar, zip, df, du, awk, sed, xargs</div>
+          <div class="level-progress">
+            <div class="progress-bar"><div class="progress-fill" id="progress-advanced" style="width:0%"></div></div>
+            <div class="progress-text" id="progress-text-advanced">0 / 0 완료</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ===== PAGE: Mode Selection ===== -->
+    <section id="page-mode" class="hidden">
+      <h2 class="text-center mb-16" id="mode-title" style="color:var(--text-primary); font-size:1.2rem;"></h2>
+      <div class="mode-selection">
+        <button class="mode-btn" id="btn-daily-mode">
+          <span class="mode-icon">&#x1F4C5;</span>
+          오늘의 퀴즈
+          <br><small style="color:var(--text-muted);">무작위 5문제</small>
+        </button>
+        <button class="mode-btn" id="btn-practice-mode">
+          <span class="mode-icon">&#x1F4DA;</span>
+          전체 연습
+          <br><small style="color:var(--text-muted);">모든 문제 순서대로</small>
+        </button>
+      </div>
+      <div class="text-center mt-16">
+        <button class="btn btn-secondary" id="btn-back-home">&#8592; 돌아가기</button>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: Quiz ===== -->
+    <section id="page-quiz" class="hidden">
+      <div class="quiz-area">
+        <div class="quiz-header">
+          <div>
+            <span class="quiz-level-badge" id="quiz-badge"></span>
+            <span class="quiz-type-badge" id="quiz-type-badge"></span>
+          </div>
+          <div class="quiz-progress" id="quiz-progress">1 / 5</div>
+        </div>
+
+        <div class="question-card fade-in" id="question-card">
+          <div class="question-text" id="question-text"></div>
+          <div class="code-block hidden" id="code-block">
+            <span class="prompt-symbol">$ </span><span id="code-content"></span>
+          </div>
+          <div class="input-area hidden" id="input-area">
+            <input type="text" class="text-input" id="answer-input" placeholder="명령어를 입력하세요..." autocomplete="off" spellcheck="false">
+          </div>
+          <div class="choices-grid hidden" id="choices-area"></div>
+        </div>
+
+        <div class="result-box hidden" id="result-box">
+          <div class="result-label" id="result-label"></div>
+          <div class="result-answer" id="result-answer"></div>
+          <div class="result-explanation" id="result-explanation"></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="btn-submit">제출</button>
+          <button class="btn btn-primary hidden" id="btn-next">다음 문제 &#8594;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: Score ===== -->
+    <section id="page-score" class="hidden">
+      <div class="score-card fade-in">
+        <div style="font-size:1rem; color:var(--text-secondary);">퀴즈 완료!</div>
+        <div class="score-big" id="score-value">0/0</div>
+        <div class="score-label" id="score-message"></div>
+        <div class="score-details">
+          <div class="score-detail-item">
+            <div class="detail-value" id="score-correct" style="color:var(--green);">0</div>
+            <div class="detail-label">정답</div>
+          </div>
+          <div class="score-detail-item">
+            <div class="detail-value" id="score-incorrect" style="color:var(--red);">0</div>
+            <div class="detail-label">오답</div>
+          </div>
+          <div class="score-detail-item">
+            <div class="detail-value" id="score-accuracy" style="color:var(--yellow);">0%</div>
+            <div class="detail-label">정답률</div>
+          </div>
+        </div>
+        <div class="btn-row" style="margin-top:24px;">
+          <button class="btn btn-secondary" id="btn-score-home">홈으로</button>
+          <button class="btn btn-primary" id="btn-retry">다시 풀기</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: Notebook (내가 모르는 명령어) ===== -->
+    <section id="page-notebook" class="hidden">
+      <div class="stats-section">
+        <h2>모르는 명령어 등록</h2>
+        <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:16px;">
+          모르는 명령어를 입력하면 설명이 자동 생성되고, 퀴즈에 포함됩니다.
+        </p>
+        <div class="notebook-form">
+          <input type="text" class="text-input" id="nb-command" placeholder="명령어 입력 (예: xargs, awk -F',')" autocomplete="off" spellcheck="false">
+          <textarea class="text-input" id="nb-context" rows="2" placeholder="(선택) 어디서 봤는지, 뭘 하려는지 메모" style="margin-top:8px; resize:vertical; font-family:var(--font-sans);"></textarea>
+          <div class="btn-row" style="justify-content:flex-start; margin-top:12px;">
+            <button class="btn btn-primary" id="btn-nb-add">등록</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-section">
+        <h2>등록한 명령어 목록</h2>
+        <div id="nb-list">
+          <p style="color:var(--text-muted); text-align:center;">아직 등록한 명령어가 없습니다</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PAGE: Stats ===== -->
+    <section id="page-stats" class="hidden">
+      <div class="stats-section">
+        <h2>연속 학습</h2>
+        <div class="streak-display">
+          <div class="streak-fire">&#x1F525;</div>
+          <div class="streak-count" id="streak-count">0</div>
+          <div class="streak-label">일 연속 학습 중</div>
+        </div>
+      </div>
+
+      <div class="stats-section">
+        <h2>전체 통계</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total-solved">0</div>
+            <div class="stat-label">총 풀이 수</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total-correct">0</div>
+            <div class="stat-label">총 정답 수</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total-accuracy">0%</div>
+            <div class="stat-label">전체 정답률</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-days-practiced">0</div>
+            <div class="stat-label">학습 일수</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-section">
+        <h2>레벨별 정답률</h2>
+        <div class="accuracy-row">
+          <div class="accuracy-label">초급</div>
+          <div class="accuracy-bar-bg"><div class="accuracy-bar-fill beginner" id="acc-bar-beginner" style="width:0%"></div></div>
+          <div class="accuracy-pct" id="acc-pct-beginner">0%</div>
+        </div>
+        <div class="accuracy-row">
+          <div class="accuracy-label">중급</div>
+          <div class="accuracy-bar-bg"><div class="accuracy-bar-fill intermediate" id="acc-bar-intermediate" style="width:0%"></div></div>
+          <div class="accuracy-pct" id="acc-pct-intermediate">0%</div>
+        </div>
+        <div class="accuracy-row">
+          <div class="accuracy-label">고급</div>
+          <div class="accuracy-bar-bg"><div class="accuracy-bar-fill advanced" id="acc-bar-advanced" style="width:0%"></div></div>
+          <div class="accuracy-pct" id="acc-pct-advanced">0%</div>
+        </div>
+      </div>
+
+      <div class="stats-section">
+        <h2>최근 학습 기록</h2>
+        <ul class="history-list" id="history-list">
+          <li class="history-item" style="color:var(--text-muted); justify-content:center;">아직 학습 기록이 없습니다</li>
+        </ul>
+      </div>
+
+      <div class="text-center mt-16">
+        <button class="btn btn-secondary" id="btn-reset-stats" style="color:var(--red); border-color:var(--red);">통계 초기화</button>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
