@@ -1,0 +1,903 @@
+[
+  {
+    "level": "beginner",
+    "category": "기초 개념",
+    "items": [
+      {
+        "title": "명령어의 구조",
+        "summary": "모든 명령어는 '명령어 [옵션] [대상]' 구조를 따른다",
+        "syntax": "명령어  [옵션]  [대상]",
+        "options": [
+          { "flag": "-r", "desc": "recursive — 하위 폴더까지 포함" },
+          { "flag": "-f", "desc": "force — 확인 안 묻고 바로 실행" },
+          { "flag": "-v", "desc": "verbose — 진행 상황을 자세히 출력" },
+          { "flag": "-i", "desc": "interactive — 하나하나 확인을 물어봄" },
+          { "flag": "-n", "desc": "dry-run / number — 미리보기 또는 줄번호" },
+          { "flag": "-h", "desc": "human-readable — KB, MB, GB 단위로 표시" },
+          { "flag": "-a", "desc": "all — 숨김 파일(.으로 시작)까지 포함" }
+        ],
+        "examples": [
+          { "code": "ls -l /home", "desc": "ls(명령어) -l(옵션: 자세히) /home(대상: 어디를)" },
+          { "code": "ls -la", "desc": "짧은 옵션은 합칠 수 있다: -l + -a = -la" },
+          { "code": "ls --all", "desc": "--로 시작하는 긴 옵션도 사용 가능" }
+        ],
+        "tip": "모르는 명령어는 '명령어 --help' 또는 'man 명령어'로 확인할 수 있다"
+      }
+    ]
+  },
+  {
+    "level": "beginner",
+    "category": "파일/폴더 다루기",
+    "items": [
+      {
+        "title": "ls — 목록 보기",
+        "summary": "현재 디렉토리의 파일과 폴더 목록을 출력한다",
+        "syntax": "ls [옵션] [경로]",
+        "options": [
+          { "flag": "-l", "desc": "자세히 보기 (권한, 소유자, 크기, 날짜)" },
+          { "flag": "-a", "desc": "숨김 파일(.으로 시작) 포함" },
+          { "flag": "-h", "desc": "파일 크기를 KB/MB/GB로 표시" },
+          { "flag": "-la", "desc": "자세히 + 숨김 파일 (가장 많이 쓰는 조합)" }
+        ],
+        "examples": [
+          { "code": "ls", "desc": "현재 폴더 목록" },
+          { "code": "ls -la", "desc": "숨김 파일 포함해서 자세히 보기" },
+          { "code": "ls -lh", "desc": "파일 크기를 사람이 읽기 쉽게" }
+        ],
+        "tip": "ls -l 출력에서 맨 앞 글자: d=폴더, -=파일, l=링크"
+      },
+      {
+        "title": "mkdir — 폴더 만들기",
+        "summary": "새로운 디렉토리(폴더)를 생성한다",
+        "syntax": "mkdir [옵션] 폴더명",
+        "options": [
+          { "flag": "-p", "desc": "parents — 중간 폴더가 없으면 같이 생성" }
+        ],
+        "examples": [
+          { "code": "mkdir models", "desc": "폴더 하나 만들기" },
+          { "code": "mkdir -p data/raw/2024", "desc": "중간 폴더가 없어도 한번에 다 만들기" }
+        ],
+        "tip": "-p 없이 중간 경로가 없으면 에러가 발생한다"
+      },
+      {
+        "title": "cp — 복사",
+        "summary": "파일이나 폴더를 복사한다",
+        "syntax": "cp [옵션] 원본 대상",
+        "options": [
+          { "flag": "-r", "desc": "recursive — 폴더 안의 모든 내용까지 복사" }
+        ],
+        "examples": [
+          { "code": "cp file.txt backup.txt", "desc": "파일 복사" },
+          { "code": "cp file.txt /home/backup/", "desc": "다른 폴더로 복사" },
+          { "code": "cp -r my_folder/ backup_folder/", "desc": "폴더 전체 복사 (-r 필수!)" }
+        ],
+        "tip": "폴더를 복사할 때 -r 없으면 에러가 난다"
+      },
+      {
+        "title": "mv — 이동 / 이름 변경",
+        "summary": "파일이나 폴더를 이동하거나 이름을 변경한다",
+        "syntax": "mv 원본 대상",
+        "options": [],
+        "examples": [
+          { "code": "mv old.txt new.txt", "desc": "이름 변경 (같은 폴더 내)" },
+          { "code": "mv file.txt /home/data/", "desc": "파일 이동" },
+          { "code": "mv my_folder/ /home/backup/", "desc": "폴더 이동 (cp와 달리 -r 필요 없음)" }
+        ],
+        "tip": "mv는 이동과 이름 변경을 모두 처리한다"
+      },
+      {
+        "title": "rm — 삭제",
+        "summary": "파일이나 폴더를 삭제한다 (휴지통 없음!)",
+        "syntax": "rm [옵션] 대상",
+        "options": [
+          { "flag": "-r", "desc": "recursive — 폴더 안의 모든 것을 삭제" },
+          { "flag": "-f", "desc": "force — 확인 안 묻고 강제 삭제" },
+          { "flag": "-i", "desc": "interactive — 삭제 전 하나하나 확인" }
+        ],
+        "examples": [
+          { "code": "rm file.txt", "desc": "파일 삭제" },
+          { "code": "rm -i file.txt", "desc": "삭제 전 확인 (안전)" },
+          { "code": "rm -r my_folder/", "desc": "폴더 전체 삭제" },
+          { "code": "rm -rf my_folder/", "desc": "강제로 폴더 전체 삭제 (확인 안 물음)" }
+        ],
+        "tip": "rm -rf는 복구 불가! 리눅스에는 휴지통이 없으므로 신중하게 사용할 것"
+      }
+    ]
+  },
+  {
+    "level": "beginner",
+    "category": "파일 내용 보기",
+    "items": [
+      {
+        "title": "cat — 파일 전체 출력",
+        "summary": "파일의 전체 내용을 터미널에 출력한다",
+        "syntax": "cat [옵션] 파일",
+        "options": [
+          { "flag": "-n", "desc": "줄번호를 포함해서 출력" }
+        ],
+        "examples": [
+          { "code": "cat file.txt", "desc": "파일 내용 전체 출력" },
+          { "code": "cat -n file.txt", "desc": "줄번호 포함해서 출력" }
+        ],
+        "tip": "파일이 길면 출력이 넘치므로 less를 사용하는 것이 좋다"
+      },
+      {
+        "title": "head / tail — 앞부분 / 뒷부분",
+        "summary": "파일의 처음 또는 마지막 N줄을 출력한다",
+        "syntax": "head/tail [-n N] 파일",
+        "options": [
+          { "flag": "-n N", "desc": "출력할 줄 수 지정 (기본 10줄)" },
+          { "flag": "-f", "desc": "(tail만) follow — 파일 끝을 실시간 추적" }
+        ],
+        "examples": [
+          { "code": "head -n 20 file.txt", "desc": "처음 20줄 보기" },
+          { "code": "tail -n 20 file.txt", "desc": "마지막 20줄 보기" },
+          { "code": "tail -f log.txt", "desc": "실시간 로그 모니터링 (Ctrl+C로 종료)" }
+        ],
+        "tip": "tail -f는 서버 로그 모니터링에 필수적인 명령어"
+      },
+      {
+        "title": "less — 스크롤하며 보기",
+        "summary": "긴 파일을 페이지 단위로 스크롤하며 읽는다",
+        "syntax": "less 파일",
+        "options": [],
+        "examples": [
+          { "code": "less large_file.txt", "desc": "파일을 페이지 단위로 읽기" }
+        ],
+        "tip": "방향키=스크롤, 스페이스=다음 페이지, /검색어=검색, q=나가기"
+      },
+      {
+        "title": "wc — 줄/단어/글자 수 세기",
+        "summary": "파일의 줄 수, 단어 수, 바이트 수를 센다",
+        "syntax": "wc [옵션] 파일",
+        "options": [
+          { "flag": "-l", "desc": "줄 수만 출력" }
+        ],
+        "examples": [
+          { "code": "wc file.txt", "desc": "줄수  단어수  바이트수  파일명" },
+          { "code": "wc -l file.txt", "desc": "줄 수만 출력" }
+        ],
+        "tip": "파이프와 자주 조합: cat log.txt | grep 'ERROR' | wc -l"
+      },
+      {
+        "title": "diff — 두 파일 비교",
+        "summary": "두 파일의 내용을 비교하여 차이점을 보여준다",
+        "syntax": "diff 파일1 파일2",
+        "options": [],
+        "examples": [
+          { "code": "diff file1.txt file2.txt", "desc": "두 파일의 차이점 출력" }
+        ],
+        "tip": "Git에서 자동으로 diff를 사용해 변경 사항을 보여준다"
+      }
+    ]
+  },
+  {
+    "level": "intermediate",
+    "category": "검색",
+    "items": [
+      {
+        "title": "grep — 텍스트 검색",
+        "summary": "파일 내용에서 특정 텍스트 패턴을 검색한다",
+        "syntax": "grep [옵션] \"패턴\" 파일/경로",
+        "options": [
+          { "flag": "-i", "desc": "ignore-case — 대소문자 구분 안 함" },
+          { "flag": "-n", "desc": "number — 줄번호도 같이 출력" },
+          { "flag": "-r", "desc": "recursive — 하위 폴더까지 검색" },
+          { "flag": "-c", "desc": "count — 매칭된 줄 수만 출력" },
+          { "flag": "-v", "desc": "invert — 패턴이 없는 줄만 출력 (제외)" },
+          { "flag": "--include", "desc": "특정 파일 유형에서만 검색" }
+        ],
+        "examples": [
+          { "code": "grep \"에러\" log.txt", "desc": "log.txt에서 '에러' 포함된 줄 출력" },
+          { "code": "grep -rn \"TODO\" ./", "desc": "모든 파일에서 TODO 검색 + 줄번호" },
+          { "code": "grep -ri \"error\" logs/", "desc": "대소문자 무시 + 재귀 검색" },
+          { "code": "grep -rn \"def train\" --include=\"*.py\" ./", "desc": ".py 파일에서만 검색" }
+        ],
+        "tip": "grep -v로 특정 패턴을 제외할 수 있다 (예: grep -v 'DEBUG' log.txt)"
+      },
+      {
+        "title": "find — 파일/폴더 찾기",
+        "summary": "조건에 맞는 파일이나 폴더를 재귀적으로 검색한다",
+        "syntax": "find 경로 [조건]",
+        "options": [
+          { "flag": "-name", "desc": "이름으로 검색 (와일드카드 사용 가능)" },
+          { "flag": "-type", "desc": "유형 지정: d=폴더, f=파일" },
+          { "flag": "-size", "desc": "크기 조건 (+100M = 100MB 초과)" },
+          { "flag": "-mtime", "desc": "수정 시간 (-7 = 최근 7일 내)" },
+          { "flag": "-delete", "desc": "찾은 파일을 삭제" }
+        ],
+        "examples": [
+          { "code": "find . -name \"*.py\"", "desc": "현재 폴더 아래에서 .py 파일 모두 찾기" },
+          { "code": "find . -type d -name \"models\"", "desc": "'models'라는 이름의 폴더만 검색" },
+          { "code": "find . -size +100M", "desc": "100MB보다 큰 파일 찾기" },
+          { "code": "find . -name \"*.log\" -delete", "desc": ".log 파일 찾아서 삭제" }
+        ],
+        "tip": "find 결과를 xargs와 조합하면 강력하다: find . -name '*.py' | xargs grep 'TODO'"
+      },
+      {
+        "title": "which / whereis — 명령어 위치 찾기",
+        "summary": "명령어의 실행 파일 위치를 찾는다",
+        "syntax": "which 명령어 / whereis 명령어",
+        "options": [],
+        "examples": [
+          { "code": "which python", "desc": "python 실행 파일의 위치" },
+          { "code": "whereis cuda", "desc": "cuda 관련 바이너리, 소스, 매뉴얼 위치" }
+        ],
+        "tip": "which는 PATH에서 찾고, whereis는 더 넓은 범위에서 검색한다"
+      }
+    ]
+  },
+  {
+    "level": "intermediate",
+    "category": "파이프라인과 리다이렉션",
+    "items": [
+      {
+        "title": "파이프 | — 명령어 연결",
+        "summary": "왼쪽 명령어의 출력을 오른쪽 명령어의 입력으로 넘긴다",
+        "syntax": "명령어A | 명령어B | 명령어C",
+        "options": [],
+        "examples": [
+          { "code": "ps aux | grep python", "desc": "프로세스 목록에서 python 찾기" },
+          { "code": "ls -la | grep \".py\"", "desc": "파일 목록에서 .py만 보기" },
+          { "code": "cat log.txt | grep \"ERROR\" | wc -l", "desc": "로그에서 에러 줄 수 세기" },
+          { "code": "ls -l | sort -k5 -n | head -n 10", "desc": "파일을 크기순 정렬해서 10개만" }
+        ],
+        "tip": "파이프는 리눅스의 핵심 철학 — 작은 도구를 연결해서 큰 작업을 수행"
+      },
+      {
+        "title": "리다이렉션 — 출력을 파일로 저장",
+        "summary": "명령어의 출력을 파일에 저장하거나 에러를 분리한다",
+        "syntax": "명령어 > 파일 (덮어쓰기) / >> 파일 (이어쓰기)",
+        "options": [
+          { "flag": ">", "desc": "출력을 파일에 저장 (기존 내용 덮어쓰기)" },
+          { "flag": ">>", "desc": "출력을 파일 끝에 추가 (이어쓰기)" },
+          { "flag": "2>", "desc": "에러 메시지만 파일로 저장" },
+          { "flag": "&>", "desc": "출력 + 에러 모두 파일로 저장" },
+          { "flag": "/dev/null", "desc": "출력을 버린다 (아무것도 안 보고 싶을 때)" }
+        ],
+        "examples": [
+          { "code": "echo \"hello\" > output.txt", "desc": "output.txt에 'hello' 저장 (덮어쓰기)" },
+          { "code": "echo \"world\" >> output.txt", "desc": "output.txt 끝에 'world' 추가" },
+          { "code": "python train.py 2> error.log", "desc": "에러만 error.log에 저장" },
+          { "code": "python train.py > /dev/null 2>&1", "desc": "모든 출력 무시" }
+        ],
+        "tip": "> 는 파일을 덮어쓰므로 주의! 이어쓰려면 >> 사용"
+      },
+      {
+        "title": "자주 쓰는 파이프 조합",
+        "summary": "파이프와 다른 명령어를 조합한 실전 패턴",
+        "syntax": null,
+        "options": [],
+        "examples": [
+          { "code": "명령어 | less", "desc": "긴 출력을 스크롤하며 보기" },
+          { "code": "명령어 | wc -l", "desc": "결과 개수 세기" },
+          { "code": "명령어 | sort", "desc": "결과 정렬" },
+          { "code": "명령어 | sort | uniq", "desc": "정렬 후 중복 제거" },
+          { "code": "명령어 | awk '{print $2}'", "desc": "특정 열만 추출 (공백 기준 2번째 열)" }
+        ],
+        "tip": "sort | uniq로 중복 제거 시, 반드시 sort를 먼저 해야 한다 (uniq는 연속된 중복만 제거)"
+      }
+    ]
+  },
+  {
+    "level": "intermediate",
+    "category": "권한",
+    "items": [
+      {
+        "title": "권한 읽는 법",
+        "summary": "rwx 형식으로 파일의 읽기/쓰기/실행 권한을 표시한다",
+        "syntax": "-rwxr-xr-- (소유자/그룹/기타)",
+        "options": [
+          { "flag": "r", "desc": "read — 읽기 권한" },
+          { "flag": "w", "desc": "write — 쓰기 권한" },
+          { "flag": "x", "desc": "execute — 실행 권한" }
+        ],
+        "examples": [
+          { "code": "-rwxr-xr--", "desc": "소유자:rwx(읽기+쓰기+실행) 그룹:r-x(읽기+실행) 기타:r--(읽기만)" },
+          { "code": "drwxr-xr-x", "desc": "d=폴더, 소유자: 전체 권한, 그룹/기타: 읽기+실행" }
+        ],
+        "tip": "맨 앞 글자: d=폴더(directory), -=일반 파일, l=심볼릭 링크"
+      },
+      {
+        "title": "chmod — 권한 변경",
+        "summary": "파일/폴더의 읽기, 쓰기, 실행 권한을 변경한다",
+        "syntax": "chmod [옵션] 권한 파일",
+        "options": [
+          { "flag": "+x", "desc": "실행 권한 추가" },
+          { "flag": "-x", "desc": "실행 권한 제거" },
+          { "flag": "755", "desc": "숫자 모드: 소유자rwx(7), 그룹r-x(5), 기타r-x(5)" },
+          { "flag": "644", "desc": "숫자 모드: 소유자rw-(6), 그룹r--(4), 기타r--(4)" }
+        ],
+        "examples": [
+          { "code": "chmod +x script.sh", "desc": "스크립트에 실행 권한 추가 (실행 전 필수!)" },
+          { "code": "chmod 755 script.sh", "desc": "소유자:rwx, 그룹:r-x, 기타:r-x" },
+          { "code": "chmod 644 file.txt", "desc": "소유자:rw-, 그룹:r--, 기타:r--" }
+        ],
+        "tip": "숫자 계산: r=4, w=2, x=1 을 더한다. rwx = 4+2+1 = 7"
+      },
+      {
+        "title": "chown — 소유자 변경",
+        "summary": "파일/폴더의 소유자와 그룹을 변경한다",
+        "syntax": "sudo chown [옵션] 소유자[:그룹] 파일",
+        "options": [
+          { "flag": "-R", "desc": "recursive — 폴더 안의 모든 파일까지" }
+        ],
+        "examples": [
+          { "code": "sudo chown j.moon file.txt", "desc": "소유자 변경" },
+          { "code": "sudo chown -R j.moon:staff my_folder/", "desc": "폴더 전체의 소유자+그룹 변경" }
+        ],
+        "tip": "chown은 보통 sudo(관리자 권한)가 필요하다"
+      }
+    ]
+  },
+  {
+    "level": "intermediate",
+    "category": "프로세스 관리",
+    "items": [
+      {
+        "title": "ps — 프로세스 목록",
+        "summary": "현재 실행 중인 프로세스 목록을 표시한다",
+        "syntax": "ps [옵션]",
+        "options": [
+          { "flag": "aux", "desc": "모든 사용자의 모든 프로세스를 자세히 표시" }
+        ],
+        "examples": [
+          { "code": "ps aux", "desc": "모든 프로세스 목록" },
+          { "code": "ps aux | grep python", "desc": "python 프로세스만 보기" }
+        ],
+        "tip": "ps aux의 출력에서 두 번째 열(PID)을 kill에 사용한다"
+      },
+      {
+        "title": "kill — 프로세스 종료",
+        "summary": "PID를 지정하여 프로세스에 종료 신호를 보낸다",
+        "syntax": "kill [옵션] PID",
+        "options": [
+          { "flag": "-9", "desc": "SIGKILL — 강제 종료 (프로세스가 안 죽을 때)" },
+          { "flag": "-15", "desc": "SIGTERM — 정상 종료 요청 (기본값)" }
+        ],
+        "examples": [
+          { "code": "kill 12345", "desc": "PID 12345 프로세스에 종료 요청" },
+          { "code": "kill -9 12345", "desc": "강제 종료 (안 죽을 때 사용)" }
+        ],
+        "tip": "ps aux | grep 프로세스명 으로 PID를 먼저 확인한 후 kill"
+      },
+      {
+        "title": "백그라운드 실행",
+        "summary": "터미널을 계속 사용하면서 프로세스를 백그라운드에서 실행한다",
+        "syntax": "명령어 & / nohup 명령어 &",
+        "options": [
+          { "flag": "&", "desc": "백그라운드에서 실행 (터미널 계속 사용 가능)" },
+          { "flag": "nohup", "desc": "터미널을 닫아도 프로세스가 계속 실행됨" }
+        ],
+        "examples": [
+          { "code": "python train.py &", "desc": "백그라운드 실행" },
+          { "code": "nohup python train.py &", "desc": "터미널 닫아도 계속 실행" },
+          { "code": "nohup python train.py > train.log 2>&1 &", "desc": "백그라운드 + 로그 저장 + 에러도 같이" },
+          { "code": "jobs", "desc": "백그라운드 작업 목록 확인" },
+          { "code": "fg", "desc": "백그라운드 작업을 다시 앞으로 가져오기" }
+        ],
+        "tip": "nohup 출력은 기본적으로 nohup.out에 저장된다"
+      },
+      {
+        "title": "Ctrl 단축키",
+        "summary": "터미널에서 자주 사용하는 키보드 단축키",
+        "syntax": null,
+        "options": [
+          { "flag": "Ctrl+C", "desc": "현재 실행 중인 명령 중단" },
+          { "flag": "Ctrl+Z", "desc": "일시정지 (bg로 백그라운드 전환 가능)" },
+          { "flag": "Ctrl+D", "desc": "입력 종료 (exit와 같음)" },
+          { "flag": "Ctrl+L", "desc": "화면 지우기 (clear와 같음)" },
+          { "flag": "Ctrl+R", "desc": "이전 명령어 검색" }
+        ],
+        "examples": [],
+        "tip": "Ctrl+C는 프로세스를 종료, Ctrl+Z는 일시정지라는 점을 구분할 것"
+      }
+    ]
+  },
+  {
+    "level": "advanced",
+    "category": "네트워크/다운로드",
+    "items": [
+      {
+        "title": "wget / curl — 파일 다운로드",
+        "summary": "URL에서 파일을 다운로드하거나 데이터를 전송한다",
+        "syntax": "wget [옵션] URL / curl [옵션] URL",
+        "options": [
+          { "flag": "wget -O 파일명", "desc": "파일명 지정해서 다운로드" },
+          { "flag": "curl -O", "desc": "원래 파일명으로 다운로드" },
+          { "flag": "curl -L", "desc": "리다이렉트 따라가기" }
+        ],
+        "examples": [
+          { "code": "wget https://example.com/data.zip", "desc": "파일 다운로드" },
+          { "code": "wget -O my_data.zip https://example.com/data", "desc": "파일명 지정해서 다운로드" },
+          { "code": "curl -O https://example.com/file.tar.gz", "desc": "curl로 다운로드" }
+        ],
+        "tip": "wget은 다운로드 전용, curl은 API 테스트에도 많이 사용된다"
+      },
+      {
+        "title": "scp — 서버 간 파일 복사",
+        "summary": "SSH를 통해 로컬-서버 또는 서버-서버 간 파일을 복사한다",
+        "syntax": "scp [옵션] 원본 대상",
+        "options": [
+          { "flag": "-r", "desc": "recursive — 폴더 전체 복사" },
+          { "flag": "-P", "desc": "포트 번호 지정 (대문자 P)" }
+        ],
+        "examples": [
+          { "code": "scp file.txt user@server:/home/user/", "desc": "로컬 → 서버" },
+          { "code": "scp user@server:/home/user/file.txt ./", "desc": "서버 → 로컬" },
+          { "code": "scp -r my_folder/ user@server:/home/user/", "desc": "폴더 전체 복사" }
+        ],
+        "tip": "대량 전송 시 rsync가 scp보다 빠르다 (변경분만 전송)"
+      },
+      {
+        "title": "ssh — 서버 접속",
+        "summary": "Secure Shell로 원격 서버에 접속한다",
+        "syntax": "ssh [옵션] user@server",
+        "options": [
+          { "flag": "-p", "desc": "포트 번호 지정 (소문자 p)" }
+        ],
+        "examples": [
+          { "code": "ssh user@server", "desc": "서버 접속" },
+          { "code": "ssh -p 2222 user@server", "desc": "포트 지정해서 접속" }
+        ],
+        "tip": "ssh 접속 후 exit 또는 Ctrl+D로 나올 수 있다"
+      },
+      {
+        "title": "rsync — 고급 동기화",
+        "summary": "파일/폴더를 동기화한다. scp보다 빠르며 변경된 부분만 전송한다",
+        "syntax": "rsync [옵션] 원본 대상",
+        "options": [
+          { "flag": "-a", "desc": "archive — 권한, 시간 등 보존 + recursive" },
+          { "flag": "-v", "desc": "verbose — 진행 상황 표시" },
+          { "flag": "-z", "desc": "압축 전송 (네트워크 절약)" },
+          { "flag": "--delete", "desc": "원본에서 삭제된 파일은 대상에서도 삭제" },
+          { "flag": "--dry-run", "desc": "실제로 전송하지 않고 미리보기" }
+        ],
+        "examples": [
+          { "code": "rsync -avz my_folder/ user@server:/home/user/my_folder/", "desc": "서버로 동기화" },
+          { "code": "rsync -avz --delete src/ dest/", "desc": "삭제된 파일까지 동기화" },
+          { "code": "rsync -avz --dry-run src/ dest/", "desc": "전송하지 않고 미리보기" }
+        ],
+        "tip": "--dry-run으로 먼저 확인 후 실제 전송하는 것이 안전하다"
+      }
+    ]
+  },
+  {
+    "level": "advanced",
+    "category": "압축",
+    "items": [
+      {
+        "title": "tar — 묶기/압축",
+        "summary": "파일을 하나로 묶거나(아카이브) 압축/해제한다",
+        "syntax": "tar [옵션] 파일명 대상",
+        "options": [
+          { "flag": "-c", "desc": "create — 새 아카이브 생성" },
+          { "flag": "-x", "desc": "extract — 아카이브 추출 (압축 풀기)" },
+          { "flag": "-z", "desc": "gzip 압축 사용" },
+          { "flag": "-f", "desc": "파일명 지정 (항상 마지막 옵션)" },
+          { "flag": "-t", "desc": "아카이브 내용 목록 보기 (풀지 않고)" },
+          { "flag": "-C", "desc": "특정 폴더에 압축 풀기" }
+        ],
+        "examples": [
+          { "code": "tar -czf archive.tar.gz my_folder/", "desc": "폴더를 tar.gz로 압축" },
+          { "code": "tar -xzf archive.tar.gz", "desc": "tar.gz 압축 풀기" },
+          { "code": "tar -tzf archive.tar.gz", "desc": "압축 내용 미리보기 (풀지 않고)" },
+          { "code": "tar -xzf archive.tar.gz -C /target/folder/", "desc": "특정 폴더에 압축 풀기" }
+        ],
+        "tip": "외우는 법: 압축=czf(Create Zip File), 풀기=xzf(eXtract Zip File)"
+      },
+      {
+        "title": "zip / unzip",
+        "summary": "zip 형식으로 압축하거나 해제한다",
+        "syntax": "zip [옵션] 파일.zip 대상 / unzip 파일.zip",
+        "options": [
+          { "flag": "-r", "desc": "recursive — 폴더 전체 압축" },
+          { "flag": "-d", "desc": "(unzip) 특정 폴더에 풀기" },
+          { "flag": "-l", "desc": "(unzip) 내용 미리보기" }
+        ],
+        "examples": [
+          { "code": "zip -r archive.zip my_folder/", "desc": "폴더를 zip으로 압축" },
+          { "code": "unzip archive.zip", "desc": "zip 압축 풀기" },
+          { "code": "unzip archive.zip -d /target/", "desc": "특정 폴더에 풀기" },
+          { "code": "unzip -l archive.zip", "desc": "내용 미리보기" }
+        ],
+        "tip": "리눅스에서는 tar.gz가 더 일반적이지만, 윈도우와 공유할 때는 zip"
+      }
+    ]
+  },
+  {
+    "level": "advanced",
+    "category": "디스크 용량",
+    "items": [
+      {
+        "title": "df — 디스크 전체 사용량",
+        "summary": "파일시스템(파티션)별 디스크 전체 사용량을 표시한다",
+        "syntax": "df [옵션]",
+        "options": [
+          { "flag": "-h", "desc": "human-readable — KB/MB/GB 단위로 표시" }
+        ],
+        "examples": [
+          { "code": "df -h", "desc": "디스크 전체 사용량 (사람이 읽기 쉽게)" }
+        ],
+        "tip": "df는 전체 디스크, du는 특정 폴더의 사용량"
+      },
+      {
+        "title": "du — 폴더별 사용량",
+        "summary": "파일/폴더의 디스크 사용량을 표시한다",
+        "syntax": "du [옵션] [경로]",
+        "options": [
+          { "flag": "-s", "desc": "summary — 하위 폴더를 합산해서 총 크기만" },
+          { "flag": "-h", "desc": "human-readable — KB/MB/GB 단위" },
+          { "flag": "--max-depth=N", "desc": "N단계 하위 폴더까지만 표시" }
+        ],
+        "examples": [
+          { "code": "du -sh *", "desc": "현재 폴더의 각 항목 크기" },
+          { "code": "du -sh /home/user/data/", "desc": "특정 폴더 총 크기" },
+          { "code": "du -h --max-depth=1", "desc": "1단계 하위 폴더까지만 크기 표시" },
+          { "code": "du -sh */ | sort -rh | head -n 10", "desc": "큰 폴더 순서대로 10개" }
+        ],
+        "tip": "용량 부족할 때: du -sh */ | sort -rh | head 로 큰 폴더를 빠르게 찾자"
+      }
+    ]
+  },
+  {
+    "level": "advanced",
+    "category": "심화 텍스트 처리",
+    "items": [
+      {
+        "title": "awk — 열 기반 텍스트 처리",
+        "summary": "텍스트를 열(column) 단위로 처리하는 도구",
+        "syntax": "awk [옵션] '패턴 {동작}' 파일",
+        "options": [
+          { "flag": "-F", "desc": "필드 구분자 지정 (기본: 공백/탭)" },
+          { "flag": "$N", "desc": "N번째 열을 의미 ($1=첫째, $2=둘째)" }
+        ],
+        "examples": [
+          { "code": "awk '{print $1}' file.txt", "desc": "1번째 열만 출력" },
+          { "code": "awk '{print $1, $3}' file.txt", "desc": "1번째, 3번째 열 출력" },
+          { "code": "awk -F',' '{print $2}' data.csv", "desc": "CSV에서 쉼표 기준 2번째 열" },
+          { "code": "awk '$3 > 100 {print $1, $3}' file.txt", "desc": "3번째 열이 100 초과인 행만 출력" }
+        ],
+        "tip": "awk는 CSV, TSV 같은 구조화된 텍스트 처리에 강력하다"
+      },
+      {
+        "title": "sed — 텍스트 치환",
+        "summary": "텍스트를 줄 단위로 치환(find & replace)하는 스트림 에디터",
+        "syntax": "sed [옵션] 's/원래/대체/[g]' 파일",
+        "options": [
+          { "flag": "s/old/new/", "desc": "각 줄에서 첫 번째 old를 new로 치환" },
+          { "flag": "s/old/new/g", "desc": "global — 모든 old를 new로 치환" },
+          { "flag": "-i", "desc": "in-place — 파일을 직접 수정 (원본이 바뀜!)" }
+        ],
+        "examples": [
+          { "code": "sed 's/old/new/' file.txt", "desc": "각 줄에서 첫 번째 old → new" },
+          { "code": "sed 's/old/new/g' file.txt", "desc": "모든 old → new" },
+          { "code": "sed -i 's/old/new/g' file.txt", "desc": "파일을 직접 수정" },
+          { "code": "sed '5d' file.txt", "desc": "5번째 줄 삭제" },
+          { "code": "sed '/pattern/d' file.txt", "desc": "pattern이 포함된 줄 삭제" }
+        ],
+        "tip": "sed -i는 원본 파일을 바꾸므로 주의! 먼저 -i 없이 결과를 확인하자"
+      },
+      {
+        "title": "xargs — 파이프 결과를 인자로 변환",
+        "summary": "파이프로 받은 입력을 다른 명령어의 인자로 변환해서 전달한다",
+        "syntax": "명령어 | xargs 다른명령어",
+        "options": [],
+        "examples": [
+          { "code": "find . -name \"*.py\" | xargs grep \"TODO\"", "desc": ".py 파일에서 TODO 검색" },
+          { "code": "find . -name \"*.tmp\" | xargs rm", "desc": ".tmp 파일을 모두 삭제" }
+        ],
+        "tip": "find 결과를 다른 명령어에 전달할 때 xargs가 핵심 연결고리"
+      }
+    ]
+  },
+  {
+    "level": "advanced",
+    "category": "실전 조합",
+    "items": [
+      {
+        "title": "GPU 학습 관련",
+        "summary": "서버에서 GPU 학습할 때 자주 쓰는 명령어 조합",
+        "syntax": null,
+        "options": [],
+        "examples": [
+          { "code": "nvidia-smi", "desc": "GPU 상태 확인" },
+          { "code": "nvidia-smi | grep python", "desc": "GPU 사용 중인 python 프로세스 찾기" },
+          { "code": "CUDA_VISIBLE_DEVICES=0,1 python train.py", "desc": "특정 GPU만 사용하도록 학습" },
+          { "code": "nohup python train.py > train.log 2>&1 &", "desc": "백그라운드 학습 + 로그 저장" },
+          { "code": "tail -f train.log", "desc": "학습 로그 실시간 모니터링" },
+          { "code": "grep \"loss\" train.log | tail -n 5", "desc": "로그에서 최근 loss 값만 보기" }
+        ],
+        "tip": "학습 전: nvidia-smi로 GPU 확인 → nohup으로 실행 → tail -f로 모니터링"
+      },
+      {
+        "title": "파일 관리 조합",
+        "summary": "대량 파일 관리에 유용한 명령어 조합",
+        "syntax": null,
+        "options": [],
+        "examples": [
+          { "code": "find . -size +1G -type f", "desc": "1GB 넘는 파일 찾기" },
+          { "code": "find . -name \"*.pyc\" -delete", "desc": ".pyc 캐시 파일 전부 삭제" },
+          { "code": "find . -name \"*.json\" | wc -l", "desc": "JSON 파일이 몇 개인지 세기" },
+          { "code": "du -sh */ | sort -rh | head -n 10", "desc": "폴더별 용량 큰 순서대로 10개" }
+        ],
+        "tip": "용량 정리 순서: du로 큰 폴더 확인 → find로 불필요한 파일 찾기 → 삭제"
+      },
+      {
+        "title": "로그/결과 분석",
+        "summary": "로그 파일과 데이터 분석에 유용한 조합",
+        "syntax": null,
+        "options": [],
+        "examples": [
+          { "code": "grep \"ERROR\" app.log > errors_only.log", "desc": "에러만 뽑아서 파일로 저장" },
+          { "code": "tail -n 100 app.log | grep \"WARNING\"", "desc": "최근 100줄에서 WARNING 찾기" },
+          { "code": "grep -r \"OOM\" logs/", "desc": "여러 로그에서 OOM(메모리 부족) 검색" },
+          { "code": "ps aux --sort=-%mem | head -n 11", "desc": "메모리 사용량 상위 10개 프로세스" }
+        ],
+        "tip": "로그 분석 패턴: grep으로 필터 → wc -l로 개수 → tail/head로 범위 제한"
+      }
+    ]
+  },
+  {
+    "level": "git",
+    "category": "핵심 개념",
+    "items": [
+      {
+        "title": "Git이란?",
+        "summary": "코드의 변경 이력을 추적하고, 여러 사람이 동시에 작업할 수 있게 해주는 버전 관리 시스템",
+        "syntax": null,
+        "options": [
+          { "flag": "Working Directory", "desc": "내가 실제로 파일을 수정하는 곳 (내 폴더)" },
+          { "flag": "Staging Area", "desc": "커밋할 파일을 골라놓는 대기실 (git add로 올림)" },
+          { "flag": "Local Repository", "desc": "내 컴퓨터의 Git 저장소 (git commit으로 확정)" },
+          { "flag": "Remote Repository", "desc": "GitHub 등 서버의 저장소 (git push로 업로드)" }
+        ],
+        "examples": [
+          { "code": "파일 수정 → git add → git commit → git push", "desc": "기본 흐름: 수정 → 선택 → 확정 → 업로드" }
+        ],
+        "tip": "Git은 파일을 저장할 때마다 스냅샷(snapshot)을 찍는 것과 비슷하다"
+      }
+    ]
+  },
+  {
+    "level": "git",
+    "category": "기본 명령어",
+    "items": [
+      {
+        "title": "git init / clone — 저장소 생성",
+        "summary": "새 Git 저장소를 만들거나 기존 저장소를 복제한다",
+        "syntax": "git init / git clone URL",
+        "options": [
+          { "flag": "--depth 1", "desc": "(clone) 최신 커밋만 복제 — 빠르다" }
+        ],
+        "examples": [
+          { "code": "git init", "desc": "현재 폴더를 Git으로 관리 시작" },
+          { "code": "git clone https://github.com/user/repo.git", "desc": "GitHub에서 저장소 복제" },
+          { "code": "git clone --depth 1 https://github.com/user/repo.git", "desc": "얕은 복제 (히스토리 생략, 빠름)" }
+        ],
+        "tip": "clone --depth 1은 대형 저장소를 빠르게 받을 때 유용하다"
+      },
+      {
+        "title": "git status / diff / log — 상태 확인",
+        "summary": "현재 상태, 변경 내용, 커밋 히스토리를 확인한다",
+        "syntax": "git status / git diff / git log",
+        "options": [
+          { "flag": "--staged", "desc": "(diff) add한 변경 사항만 확인" },
+          { "flag": "--oneline", "desc": "(log) 한 줄씩 요약" },
+          { "flag": "--graph", "desc": "(log) 브랜치 그래프로 보기" }
+        ],
+        "examples": [
+          { "code": "git status", "desc": "어떤 파일이 수정/추가/삭제됐는지 확인" },
+          { "code": "git diff", "desc": "아직 add 안 한 변경 사항 보기" },
+          { "code": "git diff --staged", "desc": "add 한 변경 사항 보기 (커밋 예정)" },
+          { "code": "git log --oneline -10", "desc": "최근 10개 커밋을 한 줄씩" },
+          { "code": "git log --graph --oneline", "desc": "브랜치 그래프로 보기" }
+        ],
+        "tip": "commit 전에 항상 git status와 git diff로 확인하는 습관을 들이자"
+      },
+      {
+        "title": "git add / commit / push — 저장 흐름",
+        "summary": "파일을 선택(add)하고, 확정(commit)하고, 업로드(push)한다",
+        "syntax": "git add → git commit → git push",
+        "options": [
+          { "flag": "add .", "desc": "모든 변경 파일 스테이징 (주의: 민감 파일 포함 가능)" },
+          { "flag": "-m", "desc": "(commit) 커밋 메시지 지정" },
+          { "flag": "origin main", "desc": "(push) 원격 저장소의 main 브랜치에 업로드" }
+        ],
+        "examples": [
+          { "code": "git add file1.py file2.sh", "desc": "특정 파일만 스테이징" },
+          { "code": "git add .", "desc": "모든 변경 파일 스테이징" },
+          { "code": "git commit -m \"변경 내용 설명\"", "desc": "변경 사항 확정 + 메시지" },
+          { "code": "git push origin main", "desc": "원격 저장소에 업로드" }
+        ],
+        "tip": "git add . 대신 git add 파일명 으로 필요한 파일만 골라서 커밋하는 것이 안전하다"
+      },
+      {
+        "title": "git pull / fetch — 최신 코드 받기",
+        "summary": "원격 저장소의 최신 코드를 로컬로 가져온다",
+        "syntax": "git pull origin 브랜치 / git fetch origin",
+        "options": [],
+        "examples": [
+          { "code": "git pull origin main", "desc": "원격의 최신 코드 받아오기 (fetch + merge)" },
+          { "code": "git fetch origin", "desc": "받아만 오고 합치지는 않음" }
+        ],
+        "tip": "pull = fetch + merge. fetch는 확인만, merge는 합치기"
+      }
+    ]
+  },
+  {
+    "level": "git",
+    "category": "브랜치",
+    "items": [
+      {
+        "title": "브랜치 기본 — 독립적인 작업 공간",
+        "summary": "main 코드를 건드리지 않고 새 기능을 개발할 수 있는 독립 공간",
+        "syntax": "git branch / git switch / git checkout",
+        "options": [
+          { "flag": "-a", "desc": "(branch) 로컬 + 원격 브랜치 모두 표시" },
+          { "flag": "-b", "desc": "(checkout) 만들면서 동시에 이동" },
+          { "flag": "-c", "desc": "(switch) 만들면서 동시에 이동" },
+          { "flag": "-d / -D", "desc": "(branch) 삭제 / 강제 삭제" }
+        ],
+        "examples": [
+          { "code": "git branch", "desc": "로컬 브랜치 목록" },
+          { "code": "git branch -a", "desc": "로컬 + 원격 브랜치 목록" },
+          { "code": "git switch -c feature/new-model", "desc": "새 브랜치 만들면서 이동 (추천)" },
+          { "code": "git checkout -b feature/new-model", "desc": "새 브랜치 만들면서 이동 (전통적)" },
+          { "code": "git branch -d feature/old", "desc": "병합된 브랜치 삭제" }
+        ],
+        "tip": "브랜치 이름은 feature/, bugfix/, hotfix/ 등의 접두어를 쓰면 관리가 편하다"
+      },
+      {
+        "title": "merge / rebase — 브랜치 합치기",
+        "summary": "두 브랜치를 합치는 두 가지 방법",
+        "syntax": "git merge 브랜치 / git rebase 브랜치",
+        "options": [],
+        "examples": [
+          { "code": "git checkout main && git merge feature/new-model", "desc": "main에 feature 브랜치를 merge" },
+          { "code": "git checkout feature/new-model && git rebase main", "desc": "feature를 main 위로 rebase" }
+        ],
+        "tip": "merge: 팀 작업, 히스토리 보존 / rebase: 개인 브랜치 정리, 깔끔한 히스토리. 이미 push한 커밋은 rebase하지 않는 게 안전"
+      },
+      {
+        "title": "Merge Conflict — 충돌 해결",
+        "summary": "같은 파일의 같은 부분을 다르게 수정하면 발생하는 충돌",
+        "syntax": null,
+        "options": [],
+        "examples": [
+          { "code": "<<<<<<< HEAD\n내 코드\n=======\n상대방 코드\n>>>>>>> feature/new-model", "desc": "충돌 마커 — 원하는 코드만 남기고 마커 삭제" }
+        ],
+        "tip": "해결 순서: 충돌 파일 열기 → 원하는 코드만 남기기 → <<<, ===, >>> 마커 삭제 → git add → git commit"
+      }
+    ]
+  },
+  {
+    "level": "git",
+    "category": "되돌리기",
+    "items": [
+      {
+        "title": "commit 전 되돌리기",
+        "summary": "아직 커밋하지 않은 변경 사항을 취소한다",
+        "syntax": "git restore / git reset",
+        "options": [
+          { "flag": "--staged", "desc": "(restore) 스테이징 취소 (add 취소)" }
+        ],
+        "examples": [
+          { "code": "git restore file.py", "desc": "파일의 변경 취소 (마지막 커밋 상태로 복원)" },
+          { "code": "git restore --staged file.py", "desc": "add 취소 (스테이징에서 내리기, 내용은 유지)" }
+        ],
+        "tip": "git restore는 git checkout --과 같은 기능의 최신 방식"
+      },
+      {
+        "title": "commit 후 되돌리기",
+        "summary": "이미 커밋한 변경 사항을 되돌린다 (reset vs revert)",
+        "syntax": "git reset / git revert",
+        "options": [
+          { "flag": "--soft", "desc": "(reset) 커밋 취소, 변경 사항은 스테이징 상태로 유지" },
+          { "flag": "--mixed", "desc": "(reset) 커밋 취소, 변경 사항은 언스테이지 상태로 유지 (기본값)" },
+          { "flag": "--hard", "desc": "(reset) 커밋 + 변경 사항 모두 삭제 (위험!)" }
+        ],
+        "examples": [
+          { "code": "git reset --soft HEAD~1", "desc": "마지막 커밋 취소 (변경 사항은 스테이징 유지)" },
+          { "code": "git reset --hard HEAD~1", "desc": "마지막 커밋 + 변경 사항 완전 삭제 (위험!)" },
+          { "code": "git revert HEAD", "desc": "마지막 커밋을 반대 커밋으로 되돌리기 (안전)" }
+        ],
+        "tip": "reset: 히스토리에서 삭제 (혼자 작업 시) / revert: 되돌리는 새 커밋 생성 (팀 작업 시 안전)"
+      }
+    ]
+  },
+  {
+    "level": "git",
+    "category": "Stash & 원격",
+    "items": [
+      {
+        "title": "git stash — 임시 저장",
+        "summary": "작업 중인 변경 사항을 임시로 저장하고 나중에 복원한다",
+        "syntax": "git stash / git stash pop",
+        "options": [
+          { "flag": "push -m", "desc": "메시지와 함께 저장" },
+          { "flag": "list", "desc": "stash 목록 보기" },
+          { "flag": "pop", "desc": "가장 최근 stash 복원 (stash에서 제거)" },
+          { "flag": "apply", "desc": "가장 최근 stash 복원 (stash에 유지)" },
+          { "flag": "drop", "desc": "특정 stash 삭제" }
+        ],
+        "examples": [
+          { "code": "git stash", "desc": "현재 변경 사항 임시 저장" },
+          { "code": "git stash push -m \"모델 수정 작업 중\"", "desc": "메시지와 함께 저장" },
+          { "code": "git stash list", "desc": "저장된 stash 목록 보기" },
+          { "code": "git stash pop", "desc": "가장 최근 stash 복원 + 제거" }
+        ],
+        "tip": "급히 브랜치를 바꿔야 할 때: stash → 브랜치 변경 → 작업 → 원래 브랜치 → stash pop"
+      },
+      {
+        "title": "원격 저장소 관리",
+        "summary": "GitHub 등 원격 저장소와의 연결을 관리한다",
+        "syntax": "git remote / git push -u",
+        "options": [
+          { "flag": "-v", "desc": "(remote) 원격 저장소 URL 포함해서 확인" },
+          { "flag": "-u", "desc": "(push) 원격 브랜치 추적 설정 (처음 한 번만)" }
+        ],
+        "examples": [
+          { "code": "git remote -v", "desc": "연결된 원격 저장소 확인" },
+          { "code": "git remote add origin https://github.com/user/repo.git", "desc": "원격 저장소 추가" },
+          { "code": "git push -u origin main", "desc": "처음 push 시 추적 설정" },
+          { "code": "git push origin --delete feature/old", "desc": "원격 브랜치 삭제" }
+        ],
+        "tip": "git push -u는 처음 한 번만, 이후에는 git push만 하면 된다"
+      }
+    ]
+  },
+  {
+    "level": "git",
+    "category": "유용한 명령어",
+    "items": [
+      {
+        "title": "blame / log — 파일 히스토리",
+        "summary": "특정 파일을 누가 언제 수정했는지 확인한다",
+        "syntax": "git blame 파일 / git log -- 파일",
+        "options": [],
+        "examples": [
+          { "code": "git log --oneline -- path/to/file.py", "desc": "파일의 커밋 히스토리" },
+          { "code": "git blame path/to/file.py", "desc": "각 줄을 누가 마지막으로 수정했는지" }
+        ],
+        "tip": "blame은 버그가 어느 커밋에서 들어왔는지 추적할 때 유용하다"
+      },
+      {
+        "title": "tag — 버전 표시",
+        "summary": "릴리스 버전을 표시하기 위한 태그를 생성한다",
+        "syntax": "git tag 태그명 [커밋]",
+        "options": [],
+        "examples": [
+          { "code": "git tag v1.0.0", "desc": "현재 커밋에 태그" },
+          { "code": "git tag v1.0.0 abc1234", "desc": "특정 커밋에 태그" },
+          { "code": "git push origin --tags", "desc": "모든 태그를 원격에 push" }
+        ],
+        "tip": "태그는 배포 버전 관리에 유용하다 (v1.0.0, v2.0.0 등)"
+      },
+      {
+        "title": "cherry-pick / .gitignore",
+        "summary": "특정 커밋만 가져오기 / 추적 제외 파일 설정",
+        "syntax": "git cherry-pick 커밋 / .gitignore 파일",
+        "options": [],
+        "examples": [
+          { "code": "git cherry-pick abc1234", "desc": "다른 브랜치의 특정 커밋 하나만 가져오기" },
+          { "code": "__pycache__/\n*.pyc\n.env\n*.log\ncheckpoints/", "desc": ".gitignore 예시 — 추적하지 않을 파일 패턴" }
+        ],
+        "tip": ".gitignore에 .env, credentials 등 민감한 파일을 반드시 추가하자"
+      },
+      {
+        "title": "자주 쓰는 시나리오",
+        "summary": "실전에서 자주 발생하는 Git 상황별 대응법",
+        "syntax": null,
+        "options": [],
+        "examples": [
+          { "code": "git commit --amend -m \"수정된 메시지\"", "desc": "잘못 commit 했을 때 — 커밋 메시지 수정 (push 전)" },
+          { "code": "git add forgotten.py && git commit --amend --no-edit", "desc": "파일 빠뜨렸을 때 — 추가 후 amend" },
+          { "code": "git revert HEAD && git push origin main", "desc": "push 후 버그 — revert로 안전하게 되돌리기" },
+          { "code": "git pull origin main", "desc": "브랜치에서 main 최신으로 맞추기" }
+        ],
+        "tip": "push 전에는 reset, push 후에는 revert를 사용하는 것이 안전하다"
+      }
+    ]
+  }
+]

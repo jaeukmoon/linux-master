@@ -142,6 +142,7 @@
     mode: $('#page-mode'),
     quiz: $('#page-quiz'),
     score: $('#page-score'),
+    learn: $('#page-learn'),
     notebook: $('#page-notebook'),
     stats: $('#page-stats')
   };
@@ -154,7 +155,8 @@
     // Update nav buttons
     $$('.nav-btn').forEach(function (btn) {
       var isActive = btn.dataset.page === name ||
-        (['home', 'mode', 'quiz', 'score'].indexOf(name) !== -1 && btn.dataset.page === 'home');
+        (['home', 'mode', 'quiz', 'score'].indexOf(name) !== -1 && btn.dataset.page === 'home') ||
+        (name === 'learn' && btn.dataset.page === 'learn');
       btn.classList.toggle('active', isActive);
     });
   }
@@ -852,6 +854,111 @@
     });
   }
 
+  // ---- Learn Page (개념 설명) ----
+  var allConcepts = [];
+  var currentLearnLevel = 'beginner';
+
+  function renderLearn(level) {
+    currentLearnLevel = level;
+    var container = $('#learn-content');
+    container.innerHTML = '';
+
+    // Update active tab
+    $$('.learn-tab').forEach(function (tab) {
+      tab.classList.toggle('active', tab.dataset.learnLevel === level);
+    });
+
+    // Filter concepts for this level
+    var groups = allConcepts.filter(function (g) { return g.level === level; });
+
+    if (groups.length === 0) {
+      container.innerHTML = '<p style="color:var(--text-muted); text-align:center; margin-top:32px;">데이터를 불러오는 중...</p>';
+      return;
+    }
+
+    groups.forEach(function (group) {
+      var section = document.createElement('div');
+      section.className = 'learn-category';
+
+      var title = document.createElement('div');
+      title.className = 'learn-category-title';
+      title.textContent = group.category;
+      section.appendChild(title);
+
+      group.items.forEach(function (item) {
+        var card = document.createElement('div');
+        card.className = 'concept-card';
+
+        // Header (always visible)
+        var header = document.createElement('div');
+        header.className = 'concept-header';
+        header.innerHTML =
+          '<div class="concept-header-left">' +
+            '<div class="concept-title">' + escapeHtml(item.title) + '</div>' +
+            '<div class="concept-summary">' + escapeHtml(item.summary) + '</div>' +
+          '</div>' +
+          '<div class="concept-toggle">&#9654;</div>';
+
+        header.addEventListener('click', function () {
+          card.classList.toggle('expanded');
+        });
+
+        card.appendChild(header);
+
+        // Body (expandable)
+        var body = document.createElement('div');
+        body.className = 'concept-body';
+
+        // Syntax
+        if (item.syntax) {
+          body.innerHTML += '<div class="concept-section">' +
+            '<div class="concept-section-title">문법</div>' +
+            '<div class="concept-syntax">' + escapeHtml(item.syntax) + '</div>' +
+          '</div>';
+        }
+
+        // Options
+        if (item.options && item.options.length > 0) {
+          var optHtml = '<div class="concept-section">' +
+            '<div class="concept-section-title">옵션</div>' +
+            '<ul class="concept-options">';
+          item.options.forEach(function (opt) {
+            optHtml += '<li><span class="concept-flag">' + escapeHtml(opt.flag) + '</span>' +
+              '<span class="concept-flag-desc">' + escapeHtml(opt.desc) + '</span></li>';
+          });
+          optHtml += '</ul></div>';
+          body.innerHTML += optHtml;
+        }
+
+        // Examples
+        if (item.examples && item.examples.length > 0) {
+          var exHtml = '<div class="concept-section">' +
+            '<div class="concept-section-title">예시</div>';
+          item.examples.forEach(function (ex) {
+            exHtml += '<div class="concept-example">' +
+              '<div class="concept-example-code">' + escapeHtml(ex.code) + '</div>' +
+              (ex.desc ? '<div class="concept-example-desc">' + escapeHtml(ex.desc) + '</div>' : '') +
+            '</div>';
+          });
+          exHtml += '</div>';
+          body.innerHTML += exHtml;
+        }
+
+        // Tip
+        if (item.tip) {
+          body.innerHTML += '<div class="concept-section">' +
+            '<div class="concept-tip">' + escapeHtml(item.tip) + '</div>' +
+          '</div>';
+        }
+
+        card.appendChild(body);
+        section.appendChild(card);
+      });
+
+      container.appendChild(section);
+    });
+  }
+
   // ---- Event Bindings ----
   function bindEvents() {
     // Nav
@@ -864,10 +971,20 @@
         } else if (page === 'notebook') {
           showPage('notebook');
           renderNotebook();
+        } else if (page === 'learn') {
+          showPage('learn');
+          renderLearn(currentLearnLevel);
         } else {
           showPage('home');
           updateHomeProgress();
         }
+      });
+    });
+
+    // Learn tabs
+    $$('.learn-tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        renderLearn(tab.dataset.learnLevel);
       });
     });
 
@@ -970,19 +1087,20 @@
 
   // ---- Init ----
   function init() {
-    fetch('quizzes.json')
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        allQuizzes = data;
-        updateHomeProgress();
-        bindEvents();
-      })
-      .catch(function (err) {
-        console.error('Failed to load quizzes:', err);
-        // Fallback: try to work anyway
-        allQuizzes = [];
-        bindEvents();
-      });
+    Promise.all([
+      fetch('quizzes.json').then(function (res) { return res.json(); }),
+      fetch('concepts.json').then(function (res) { return res.json(); }).catch(function () { return []; })
+    ]).then(function (results) {
+      allQuizzes = results[0];
+      allConcepts = results[1];
+      updateHomeProgress();
+      bindEvents();
+    }).catch(function (err) {
+      console.error('Failed to load data:', err);
+      allQuizzes = [];
+      allConcepts = [];
+      bindEvents();
+    });
   }
 
   // Start

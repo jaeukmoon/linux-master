@@ -21,6 +21,7 @@
     <!-- Navigation -->
     <nav class="nav-bar">
       <button class="nav-btn active" data-page="home">홈</button>
+      <button class="nav-btn" data-page="learn">학습</button>
       <button class="nav-btn" data-page="notebook">노트</button>
       <button class="nav-btn" data-page="stats">통계</button>
     </nav>
@@ -148,6 +149,25 @@
           <button class="btn btn-primary" id="btn-retry">다시 풀기</button>
         </div>
       </div>
+    </section>
+
+    <!-- ===== PAGE: Learn (개념 설명) ===== -->
+    <section id="page-learn" class="hidden">
+      <div class="learn-header">
+        <h2 class="learn-title">개념 학습</h2>
+        <p class="learn-subtitle">리눅스 명령어와 Git의 핵심 개념을 익히세요</p>
+      </div>
+
+      <!-- Level Tabs -->
+      <div class="learn-tabs" id="learn-tabs">
+        <button class="learn-tab active" data-learn-level="beginner">초급</button>
+        <button class="learn-tab" data-learn-level="intermediate">중급</button>
+        <button class="learn-tab" data-learn-level="advanced">고급</button>
+        <button class="learn-tab" data-learn-level="git">Git</button>
+      </div>
+
+      <!-- Concept Content -->
+      <div id="learn-content"></div>
     </section>
 
     <!-- ===== PAGE: Notebook (내가 모르는 명령어) ===== -->

@@ -825,6 +825,228 @@ a {
   text-decoration: underline;
 }
 
+/* ========== Learn Page ========== */
+.learn-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.learn-title {
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.learn-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.learn-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.learn-tab {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 8px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.learn-tab:hover {
+  border-color: var(--blue);
+  color: var(--text-primary);
+}
+
+.learn-tab.active {
+  background: var(--blue-bg);
+  border-color: var(--blue);
+  color: var(--blue);
+}
+
+.learn-category {
+  margin-bottom: 28px;
+}
+
+.learn-category-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  padding-left: 4px;
+}
+
+.concept-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.concept-card:hover {
+  border-color: var(--text-muted);
+}
+
+.concept-card.expanded {
+  border-color: var(--blue);
+}
+
+.concept-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  cursor: pointer;
+  gap: 12px;
+}
+
+.concept-header-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.concept-title {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--green);
+  margin-bottom: 2px;
+}
+
+.concept-summary {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.concept-toggle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.concept-card.expanded .concept-toggle {
+  transform: rotate(90deg);
+}
+
+.concept-body {
+  display: none;
+  padding: 0 18px 16px;
+  border-top: 1px solid var(--border);
+  animation: fadeIn 0.2s ease;
+}
+
+.concept-card.expanded .concept-body {
+  display: block;
+}
+
+.concept-section {
+  margin-top: 14px;
+}
+
+.concept-section-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.concept-syntax {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--yellow);
+}
+
+.concept-options {
+  list-style: none;
+}
+
+.concept-options li {
+  padding: 6px 0;
+  font-size: 0.88rem;
+  border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+  line-height: 1.5;
+}
+
+.concept-options li:last-child {
+  border-bottom: none;
+}
+
+.concept-flag {
+  font-family: var(--font-mono);
+  color: var(--blue);
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.concept-flag-desc {
+  color: var(--text-secondary);
+}
+
+.concept-example {
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin-bottom: 6px;
+}
+
+.concept-example-code {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.concept-example-code::before {
+  content: '$ ';
+  color: var(--green);
+}
+
+.concept-example-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  padding-left: 16px;
+}
+
+.concept-tip {
+  background: var(--yellow-bg);
+  border: 1px solid rgba(210, 153, 34, 0.3);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  color: var(--yellow);
+  line-height: 1.5;
+}
+
+.concept-tip::before {
+  content: 'TIP ';
+  font-weight: 700;
+  margin-right: 4px;
+}
+
 /* ========== Utilities ========== */
 .hidden {
   display: none !important;
